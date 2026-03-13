@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pe_he172497/screens/summary_screen.dart';
 import '../models/order_model.dart';
 
 class DiscountScreen extends StatefulWidget {
@@ -34,7 +35,11 @@ class _DiscountScreenState extends State<DiscountScreen> {
             ElevatedButton(
               onPressed: canContinue ? () {
                 widget.order.promoCode = code;
-                // Sang Screen 7 (Summary)
+                // Thêm lệnh chuyển trang:
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SummaryScreen(order: widget.order))
+                );
               } : null,
               child: const Text("CONTINUE"),
             )

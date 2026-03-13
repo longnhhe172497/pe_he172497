@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../models/order_model.dart';
 import '../models/student_model.dart';
+import 'customer_info_screen.dart';
 
 class BrandSelectionScreen extends StatefulWidget {
   final Student student;
@@ -64,13 +66,17 @@ class _BrandSelectionScreenState extends State<BrandSelectionScreen> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
                 onPressed: selectedBrand == null ? null : () {
-                  // Logic: Tự động trigger flag bespoke nếu chọn Luxury Custom
                   bool isBespoke = (selectedBrand == "Luxury Custom");
 
-                  // In Log để kiểm tra (Hoặc lưu vào State Manager như Provider)
-                  debugPrint("Bespoke Flag: $isBespoke");
-
-                  // Điều hướng sang Task 4 (Sẽ làm ở phần tiếp theo)
+                  // Lệnh chuyển trang quan trọng nhất:
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CustomerInfoScreen(
+                              order: OrderModel(brand: selectedBrand!, isBespoke: isBespoke)
+                          )
+                      )
+                  );
                 },
                 child: const Text("CONTINUE", style: TextStyle(color: Colors.white)),
               ),
