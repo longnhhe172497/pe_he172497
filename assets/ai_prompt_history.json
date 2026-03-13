@@ -1,0 +1,27 @@
+[
+  {
+    "date": "2026-03-13",
+    "time": "14:30:15",
+    "sender": "SE1871-KS Student",
+    "receiver": "AI Assistant",
+    "prompt": "Design a JSON data structure to log all AI commands and results in the exam.",
+    "response": "[ { \"date\": \"2026-03-13\", \"time\": \"14:30:15\", \"sender\": \"user account name\", \"receiver\": \"AI assistant name\", \"prompt\": \"<question>\", \"response\": \"<answer>\" } ]"
+  },
+  {
+    "date": "2026-03-13",
+    "time": "14:33:02",
+    "sender": "SE1871-KS Student",
+    "receiver": "AI Assistant",
+    "prompt": "Write a Vietnamese phone validator for prefixes 03,05,07,08,09 with 10 digits.",
+    "response": "Use RegExp: ^(03|05|07|08|09)[0-9]{8}$ and also ensure the input is not empty."
+  },
+  {
+    "date": "2026-03-13",
+    "time": "14:40:21",
+    "sender": "SE1871-KS Student",
+    "receiver": "AI Assistant",
+    "prompt": "How to ensure splash stays 3 seconds but still loads JSON identity?",
+    "response": "Start loading JSON immediately; update UI when loaded; then await Future.wait([loadFuture, Future.delayed(Duration(seconds:3))]) before navigating."
+  }
+]
+

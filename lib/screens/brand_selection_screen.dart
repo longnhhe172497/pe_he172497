@@ -58,6 +58,22 @@ class _BrandSelectionScreenState extends State<BrandSelectionScreen> {
               },
             ),
           ),
+          if (selectedBrand == "Luxury Custom")
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: Row(
+                children: const [
+                  Icon(Icons.warning_amber_rounded, color: Colors.redAccent),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      "Bespoke Design Requirement: you must provide a design description in later steps.",
+                      style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: SizedBox(

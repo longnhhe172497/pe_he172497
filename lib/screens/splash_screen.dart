@@ -12,6 +12,9 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Student? _student;
+  Object? _loadError;
+
   @override
   void initState() {
     super.initState();
@@ -19,24 +22,40 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _startInitProcess() async {
-    // Task 1: Sử dụng Future.wait để đồng bộ hóa việc load data và thời gian chờ
+    // Task 1:
+    // - Load JSON (to show identity on Splash)
+    // - Keep Splash visible for exactly 3 seconds (Future.delayed)
+    final loadStudentFuture = rootBundle.loadString('assets/student_info.json').then((raw) {
+      final Map<String, dynamic> jsonData = json.decode(raw);
+      return Student.fromJson(jsonData);
+    });
+
+    loadStudentFuture.then((student) {
+      if (!mounted) return;
+      setState(() {
+        _student = student;
+        _loadError = null;
+      });
+    }).catchError((e) {
+      if (!mounted) return;
+      setState(() {
+        _loadError = e;
+      });
+    });
+
     final results = await Future.wait([
-      rootBundle.loadString('assets/student_info.json'), // Load JSON
-      Future.delayed(const Duration(seconds: 3)),      // Chờ đúng 3s
+      loadStudentFuture,
+      Future.delayed(const Duration(seconds: 3)),
     ]);
 
-    // Chuyển đổi dữ liệu JSON thành Object Student thông qua Model class
-    final Map<String, dynamic> jsonData = json.decode(results[0] as String);
-    final student = Student.fromJson(jsonData);
-
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BrandSelectionScreen(student: student),
-        ),
-      );
-    }
+    final student = results[0] as Student;
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BrandSelectionScreen(student: student),
+      ),
+    );
   }
 
   @override
@@ -59,12 +78,40 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             const SizedBox(height: 24),
+            if (_student != null) ...[
+              Text(
+                _student!.name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                _student!.studentId,
+                style: const TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                _student!.email,
+                style: const TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+            ] else if (_loadError != null) ...[
+              const Text(
+                "Failed to load student identity",
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                "Check `assets/student_info.json` in pubspec.yaml",
+                style: TextStyle(color: Colors.black54),
+              ),
+            ] else ...[
+              const Text(
+                "Loading identity...",
+                style: TextStyle(color: Colors.black54),
+              ),
+            ],
+            const SizedBox(height: 18),
             const CircularProgressIndicator(color: Colors.black),
-            const SizedBox(height: 16),
-            const Text(
-              "SNEAKER-X SYSTEM",
-              style: TextStyle(letterSpacing: 2, fontWeight: FontWeight.bold),
-            )
           ],
         ),
       ),
